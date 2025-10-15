@@ -1,0 +1,45 @@
+---
+title: "Jowoncni report pdf hello world 한글"
+author: "Joy"
+format:
+  pdf:
+    latex-engine: xelatex
+    mainfont: "NanumGothic"
+    number-sections: true
+    papersize: a4
+    fontsize: 11pt
+    toc: true
+    header-includes:
+      - \linespread{1.8}
+      - \usepackage{pdfpages}
+      - \usepackage{kotex}
+---
+
+# 한글 테스트
+
+한글 Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## 코드 실행
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+1 + 1
+```
+
+You can add options to executable code like this
+
+```{r}
+#| echo: false
+2 * 2
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).
+
+## Head2 두번째 단락
+
+여기는 Head2 두번째 단락의 본문 내용
+
+# 두번째 큰 제목
+
+여기는 Head1 두번째의 본문 내용

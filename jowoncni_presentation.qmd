@@ -1,0 +1,195 @@
+---
+title: "Quarto 문서자동화"
+subtitle: "Create beautiful report template with quarto"
+title-block-banner: true
+author: "Joy"
+date: 2025-11-06
+date-format: short
+format:
+  revealjs:
+    theme: beige
+    slide-number: true
+    footer: "조원씨앤아이/마켓링크/한국R사용자회"
+editor: source
+---
+
+## 왜 '문서 자동화'가 필요한가요?
+
+- 반복적인 수작업의 현실
+
+- 데이터 변경 시: 분석 코드 다시 실행 → 결과(표, 그래프) 복사.
+
+- 보고서 작성: Word, PowerPoint에 붙여넣기.
+
+- 서식 수정: 폰트, 간격, 색상 등 일일이 맞추기.
+
+- 오류 발생: 숫자나 그래프를 잘못 복사하여 생기는 실수.
+
+- 시간 낭비: 단순 반복 작업에 소요되는 많은 시간.
+
+## Quarto를 통한 자동화
+
+- Single Source: 코드, 텍스트, 결과가 하나의 문서에 존재.
+
+- 재현성: Render 버튼 하나로 언제나 동일한 결과물 생성.
+
+- 다양한 포맷: 버튼 하나로 PDF, HTML, Word 등 결과물 변경.
+
+- 템플릿화: 정해진 서식을 '템플릿'으로 만들어 재사용.
+
+- 궁극적인 목표: "코드가 바뀌면, 보고서도 자동으로 바뀐다!"
+  
+
+
+## Quarto란 무엇인가?
+
+- "차세대 R Markdown" - 과학 및 기술 문서 퍼블리싱 시스템
+
+- 하나의 소스, 다양한 결과물: .qmd 파일 하나로 PDF, HTML, Word, 프레젠테이션 등 생성.
+
+- 다중 언어 지원: Python, R, Julia, Observable JS 코드를 네이티브하게 지원.
+
+- 간결한 문법: 직관적인 마크다운 문법과 코드 청크(````{ }`) 등으로 구성.
+
+- 강력한 확장성: Pandoc 기반으로 LaTeX, CSS 등 다양한 기술과 연동하여 커스터마이징 가능.
+
+## 오늘의 목표: 자동화된 PDF 보고서 만들기
+
+R(Python) 코드 실행 결과를 포함하는 재사용 가능한 PDF 보고서 템플릿을 만들어 봅니다.
+
+### 우리가 만들 것: 보고서 소스 파일 
+
+(report.qmd)
+
+- 분석 코드와 내용 작성.
+
+- 동적 변경을 위한 파라미터 설정.
+
+- 회사 로고, 머리글/바닥글 등 고정 서식 정의.
+
+- 최종 결과물 (report.pdf)
+
+- 템플릿이 적용된 자동화된 보고서.
+
+
+
+## Prerequisite
+
+한글 문서 자동화에 필요한 리눅스 환경 Install 필요
+
+1. (install 1) wsl2 설치
+2. (install 2) wsl에 R, Rstudio Server 설치
+3. (install 3) tex 설치
+4. (install 4) Quarto 설치
+5. (install 5) 나눔 폰트 설치
+
+## (install 1) wsl2 설치
+
+[https://learn.microsoft.com/ko-kr/windows/wsl/install](https://learn.microsoft.com/ko-kr/windows/wsl/install)
+
+PowerShell 관리자 권한으로 실행
+
+```{.cmd}
+PS > wsl --install
+```
+
+## (install 2) wsl에 R 설치
+
+[https://cran.yu.ac.kr/](https://cran.yu.ac.kr/)
+
+Ubuntu Packages For R
+
+```{.bash}
+$ sudo apt update -qq
+$ sudo apt install --no-install-recommends software-properties-common dirmngr
+$ wget -qO- https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc | sudo tee -a /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc
+$ sudo add-apt-repository "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/"
+$ sudo apt install --no-install-recommends r-base
+```
+
+## (install 3) tex 설치
+
+```{.bash}
+$ sudo apt install texlive-full
+```
+Quarto가 PDF를 만드는 과정은 사실 내부적으로 **LaTeX(레이텍)**이라는 조판 시스템을 이용하는데 LaTeX을 문서를 조립할 때 '패키지'라는 부품 단위 기능을 불러와서 사용합니다.  
+
+- 한글 처리 패키지: kotex, xeCJK 와 같이 한글 입력을 처리하고 줄 바꿈 등을 자연스럽게 해주는 패키지.
+- 최신 LaTeX 엔진: 유니코드(UTF-8) 기반의 한글을 잘 처리할 수 있는 XeLaTeX나 LuaLaTeX 같은 엔진.
+
+::: {.callout-tip appearance="simple"}
+texlive-full을 설치하면 복잡한 Latex 패키지 설치에 관련한 모든 것을 알아서 해결해 줍니다.
+:::
+
+
+## (install 4) Quarto 설치
+
+[https://quarto.org/docs/get-started/](https://quarto.org/docs/get-started/)
+
+```{.bash}
+$ wget https://github.com/quarto-dev/quarto-cli/releases/download/v1.8.25/quarto-1.8.25-linux-amd64.deb
+$ sudo dpkg -i quarto-1.8.25-linux-amd64.deb
+$ quarto check
+```
+
+## (install 5) 나눔 폰트 설치
+
+나눔 폰트 전체를 설치하는 우분투 리눅스 명령어
+
+```{.bash}
+$ sudo apt-get install fonts-nanum*
+```
+
+
+## pdf와 docx 문서 자동화의 차이점
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**PDF (인쇄물 지향)**
+LaTeX  
+- 코드 기반 LaTeX 코드로 모든 것을 제어. 정교하지만 복잡함.  
+- 고정 레이아웃 (Fixed) 어떤 환경에서 열어도 줄 바꿈, 페이지 나눔이 동일. 인쇄물과 동일.  
+- TeX 배포판 설치 필수 (예: TeX Live, MiKTeX) 용량이 크고 설치가 필요.
+:::
+
+::: {.column width="50%"}
+**DOCX (협업 지향)**
+Open XML  
+- GUI 기반 (reference.docx) 워드에서 스타일을 수정한 파일을 템플릿으로 사용. 직관적.  
+- 유동적 레이아웃 (Reflowable) 보는 사람의 설정(폰트, 여백)에 따라 페이지 나눔이나 줄 바꿈이 바뀔 수 있음.  
+- 별도 설치 필요 없음 Quarto만 있으면 생성 가능. (단, 수정/확인 시 MS Word 필요)
+:::
+
+::::
+
+
+## 판매량 데이터 시각화
+
+이 문서는 월간 판매 데이터를 분석하고 시각화한 결과입니다.
+
+```{r}
+#| echo: true
+#| output-location: slide
+
+library(ggplot2)
+
+# 예시 데이터 생성
+sales_data <- data.frame(
+  month = factor(c("1월", "2월", "3월"), levels = c("1월", "2월", "3월")),
+  sales = c(150, 220, 180)
+)
+
+# 그래프 생성
+ggplot(sales_data, aes(x = month, y = sales, fill = month)) +
+  geom_bar(stat = "identity") +
+  labs(title = "월별 판매량", x = "월", y = "판매량 (백만 원)") +
+  theme_minimal(base_family = "NanumGothic") # 한글 폰트 지정
+```
+
+
+
+
+# Q & A
+
+# 감사합니다.
