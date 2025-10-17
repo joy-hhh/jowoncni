@@ -141,6 +141,35 @@ $ sudo apt-get install fonts-nanum*
 ```
 
 
+## Hello world
+
+가장 기본적으로 제공하는 Quarto 문서를 생성해 봅니다.  
+Ctrl + k 단축키로 Render 합니다.
+
+기본 Yaml Header (pdf)
+
+```{.qmd}
+---
+title: "Jowoncni report"
+author: "Joy"
+format: pdf
+editor: source
+---
+```
+
+기본 Yaml Header (docx)
+
+```{.qmd}
+---
+title: "Jowoncni report"
+author: "Joy"
+format: docx
+editor: source
+---
+```
+
+
+
 ## pdf와 docx 문서 자동화의 차이점
 
 :::: {.columns}
@@ -164,9 +193,41 @@ Open XML
 ::::
 
 
+## 한글 적용 패키지 선언
+
+```{.qmd}
+---
+title: "Jowoncni report pdf hello world 한글"
+author: "Joy"
+format:
+  pdf:
+    latex-engine: xelatex
+    mainfont: "NanumGothic"
+    number-sections: true
+    papersize: a4
+    fontsize: 11pt
+    toc: true
+    header-includes:
+      - \linespread{1.8}
+      - \usepackage{pdfpages}
+      - \usepackage{kotex}
+---
+```
+
+
+## Python과 Tex을 활용한 표지 만들어 붙이기
+
+파일 구성
+
+- cover_template.tex
+- generate_cover.py
+- report.qmd
+
+
+
 ## 판매량 데이터 시각화
 
-이 문서는 월간 판매 데이터를 분석하고 시각화한 결과입니다.
+월간 판매 데이터를 분석하고 시각화한 결과입니다.
 
 ```{r}
 #| echo: true

@@ -308,6 +308,25 @@ Joy
 <p>나눔 폰트 전체를 설치하는 우분투 리눅스 명령어</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href=""></a><span class="ex">$</span> sudo apt-get install fonts-nanum<span class="pp">*</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
+<section id="hello-world" class="slide level2">
+<h2>Hello world</h2>
+<p>가장 기본적으로 제공하는 Quarto 문서를 생성해 봅니다.<br>
+Ctrl + k 단축키로 Render 합니다.</p>
+<p>기본 Yaml Header (pdf)</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource qmd number-lines code-with-copy"><code class="sourceCode"><span id="cb6-1"><a href=""></a>---</span>
+<span id="cb6-2"><a href=""></a>title: "Jowoncni report"</span>
+<span id="cb6-3"><a href=""></a>author: "Joy"</span>
+<span id="cb6-4"><a href=""></a>format: pdf</span>
+<span id="cb6-5"><a href=""></a>editor: source</span>
+<span id="cb6-6"><a href=""></a>---</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>기본 Yaml Header (docx)</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource qmd number-lines code-with-copy"><code class="sourceCode"><span id="cb7-1"><a href=""></a>---</span>
+<span id="cb7-2"><a href=""></a>title: "Jowoncni report"</span>
+<span id="cb7-3"><a href=""></a>author: "Joy"</span>
+<span id="cb7-4"><a href=""></a>format: docx</span>
+<span id="cb7-5"><a href=""></a>editor: source</span>
+<span id="cb7-6"><a href=""></a>---</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
 <section id="pdf와-docx-문서-자동화의-차이점" class="slide level2">
 <h2>pdf와 docx 문서 자동화의 차이점</h2>
 <div class="columns">
@@ -323,23 +342,51 @@ Joy
 - 별도 설치 필요 없음 Quarto만 있으면 생성 가능. (단, 수정/확인 시 MS Word 필요)</p>
 </div></div>
 </section>
+<section id="한글-적용-패키지-선언" class="slide level2">
+<h2>한글 적용 패키지 선언</h2>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource qmd number-lines code-with-copy"><code class="sourceCode"><span id="cb8-1"><a href=""></a>---</span>
+<span id="cb8-2"><a href=""></a>title: "Jowoncni report pdf hello world 한글"</span>
+<span id="cb8-3"><a href=""></a>author: "Joy"</span>
+<span id="cb8-4"><a href=""></a>format:</span>
+<span id="cb8-5"><a href=""></a>  pdf:</span>
+<span id="cb8-6"><a href=""></a>    latex-engine: xelatex</span>
+<span id="cb8-7"><a href=""></a>    mainfont: "NanumGothic"</span>
+<span id="cb8-8"><a href=""></a>    number-sections: true</span>
+<span id="cb8-9"><a href=""></a>    papersize: a4</span>
+<span id="cb8-10"><a href=""></a>    fontsize: 11pt</span>
+<span id="cb8-11"><a href=""></a>    toc: true</span>
+<span id="cb8-12"><a href=""></a>    header-includes:</span>
+<span id="cb8-13"><a href=""></a>      - \linespread{1.8}</span>
+<span id="cb8-14"><a href=""></a>      - \usepackage{pdfpages}</span>
+<span id="cb8-15"><a href=""></a>      - \usepackage{kotex}</span>
+<span id="cb8-16"><a href=""></a>---</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="python과-tex을-활용한-표지-만들어-붙이기" class="slide level2">
+<h2>Python과 Tex을 활용한 표지 만들어 붙이기</h2>
+<p>파일 구성</p>
+<ul>
+<li>cover_template.tex</li>
+<li>generate_cover.py</li>
+<li>report.qmd</li>
+</ul>
+</section>
 <section id="판매량-데이터-시각화" class="slide level2">
 <h2>판매량 데이터 시각화</h2>
-<p>이 문서는 월간 판매 데이터를 분석하고 시각화한 결과입니다.</p>
+<p>월간 판매 데이터를 분석하고 시각화한 결과입니다.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href=""></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb6-2"><a href=""></a></span>
-<span id="cb6-3"><a href=""></a><span class="co"># 예시 데이터 생성</span></span>
-<span id="cb6-4"><a href=""></a>sales_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb6-5"><a href=""></a>  <span class="at">month =</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="st">"1월"</span>, <span class="st">"2월"</span>, <span class="st">"3월"</span>), <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"1월"</span>, <span class="st">"2월"</span>, <span class="st">"3월"</span>)),</span>
-<span id="cb6-6"><a href=""></a>  <span class="at">sales =</span> <span class="fu">c</span>(<span class="dv">150</span>, <span class="dv">220</span>, <span class="dv">180</span>)</span>
-<span id="cb6-7"><a href=""></a>)</span>
-<span id="cb6-8"><a href=""></a></span>
-<span id="cb6-9"><a href=""></a><span class="co"># 그래프 생성</span></span>
-<span id="cb6-10"><a href=""></a><span class="fu">ggplot</span>(sales_data, <span class="fu">aes</span>(<span class="at">x =</span> month, <span class="at">y =</span> sales, <span class="at">fill =</span> month)) <span class="sc">+</span></span>
-<span id="cb6-11"><a href=""></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
-<span id="cb6-12"><a href=""></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"월별 판매량"</span>, <span class="at">x =</span> <span class="st">"월"</span>, <span class="at">y =</span> <span class="st">"판매량 (백만 원)"</span>) <span class="sc">+</span></span>
-<span id="cb6-13"><a href=""></a>  <span class="fu">theme_minimal</span>(<span class="at">base_family =</span> <span class="st">"NanumGothic"</span>) <span class="co"># 한글 폰트 지정</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb9-2"><a href=""></a></span>
+<span id="cb9-3"><a href=""></a><span class="co"># 예시 데이터 생성</span></span>
+<span id="cb9-4"><a href=""></a>sales_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb9-5"><a href=""></a>  <span class="at">month =</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="st">"1월"</span>, <span class="st">"2월"</span>, <span class="st">"3월"</span>), <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"1월"</span>, <span class="st">"2월"</span>, <span class="st">"3월"</span>)),</span>
+<span id="cb9-6"><a href=""></a>  <span class="at">sales =</span> <span class="fu">c</span>(<span class="dv">150</span>, <span class="dv">220</span>, <span class="dv">180</span>)</span>
+<span id="cb9-7"><a href=""></a>)</span>
+<span id="cb9-8"><a href=""></a></span>
+<span id="cb9-9"><a href=""></a><span class="co"># 그래프 생성</span></span>
+<span id="cb9-10"><a href=""></a><span class="fu">ggplot</span>(sales_data, <span class="fu">aes</span>(<span class="at">x =</span> month, <span class="at">y =</span> sales, <span class="at">fill =</span> month)) <span class="sc">+</span></span>
+<span id="cb9-11"><a href=""></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
+<span id="cb9-12"><a href=""></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"월별 판매량"</span>, <span class="at">x =</span> <span class="st">"월"</span>, <span class="at">y =</span> <span class="st">"판매량 (백만 원)"</span>) <span class="sc">+</span></span>
+<span id="cb9-13"><a href=""></a>  <span class="fu">theme_minimal</span>(<span class="at">base_family =</span> <span class="st">"NanumGothic"</span>) <span class="co"># 한글 폰트 지정</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 </section>
