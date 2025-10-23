@@ -65,6 +65,7 @@ library(kableExtra)
 library(magrittr)
 library(ggplot2)
 library(readxl)
+
 ss <- "Report_Tables.xlsx"
 Var <- read_excel(ss, sheet = "Var")
 name1 <- Var$name1
@@ -81,6 +82,16 @@ beta <- Var$beta
 betau <- Var$betau
 tax <- Var$tax
 drate <- Var$drate
+
+# 폰트 설정
+library(showtext)
+# 구글 '나눔고딕' 폰트를 불러옵니다.
+font_add_google("Nanum Gothic", "nanumgothic")
+# R의 모든 그래픽 장치에서 showtext를 자동 실행합니다.
+showtext_auto()
+# ggplot2 테마의 기본 폰트를 설정합니다.
+theme_update(text = element_text(family = "nanumgothic"))
+
 ```
 
 
@@ -93,7 +104,7 @@ drate <- Var$drate
      
     
 
-당 법인은 마켓링크와 `r name1`(이하 “회사")에 대하여 Quarto 보고서 자동화 교육을 제공하기 위하여 본 pdf 예시 qmd 컨텐츠를 제작하였습니다. 본 컨텐츠에는 주식가치평가 보고서를 사례로 하였으며 관련 내용은 예시로써 어떠한 현실 상황과도 관련이 없습니다.    
+당 법인은 마켓링크와 `r name1`(이하 “회사")에 대하여 Quarto 보고서 자동화 교육을 제공하기 위하여 본 pdf 예시 qmd 컨텐츠를 제작하였습니다. 본 컨텐츠에는 주식가치평가 보고서의 일부 내용을 보고서 문단의 예시 사례로 하였으며 관련 내용은 예시로써 어떠한 현실 상황과도 관련이 없습니다.    
    
 
     
@@ -122,7 +133,7 @@ drate <- Var$drate
 ## 가치평가 결과
    
 
-### 현금흐름할인(Discounted Cash Flow: DCF)법을 적용하여 평가한 평가기준일(`r date1`)현재 대상 주식의 가치 평가 결과는 @tbl-summary과 같습니다.   
+현금흐름할인(Discounted Cash Flow: DCF)법을 적용하여 평가한 평가기준일(`r date1`)현재 대상 주식의 가치 평가 결과는 @tbl-summary 과 같습니다.   
    
    
    
@@ -139,7 +150,7 @@ Summary <- read_excel(ss,
 #| tbl-cap: "Executive Summary"
 #| tbl-pos: 'H'
 
-kable(Summary, format = "latex", booktabs = TRUE, escape = TRUE) %>%
+kable(Summary, format = "latex", booktabs = TRUE, escape = TRUE, align = "lrl") %>%
   kable_styling(latex_options = c("striped","scale_down"))
 
 ```
@@ -164,42 +175,27 @@ kable(Summary, format = "latex", booktabs = TRUE, escape = TRUE) %>%
    
 
 
-### 주식가치평가 대상 회사의 개요는 Table\@ref(tab:Company)와 같습니다. 
+## 주식가치평가 대상 회사의 개요는 @tbl-company 와 같습니다. 
 
 
 ```{r}
 #| include: false
 
-Summary <- read_excel(ss, 
-                     sheet = "Result",
+Company <- read_excel(ss, 
+                     sheet = "Company",
                      col_types = "text")
 ```
 
 ```{r}
-#| label: tbl-summary
-#| tbl-cap: "Executive Summary"
+#| label: tbl-company
+#| tbl-cap: "Company Overview"
 #| tbl-pos: 'H'
 
-kable(Summary, format = "latex", booktabs = TRUE, escape = TRUE) %>%
+kable(Company, format = "latex", booktabs = TRUE, escape = TRUE) %>%
   kable_styling(latex_options = c("striped","scale_down"))
 
 ```
 
-   
-```{r include=FALSE}
-Company <- read_sheet(ss, 
-                     sheet = "Company",
-                     col_type = 'c')
-```
-    
-```{r Company}
-kbl(Company, 
-    booktabs = T,linesep = "",
-    format.args = list(big.mark = ",", scientific = FALSE),
-    position ="!h",
-    caption = "Company Overview") %>%
-  kable_styling(latex_options = c("striped"))
-```
    
 
 
@@ -209,42 +205,9 @@ kbl(Company,
 ## 기업가치 평가의 개요 및 절차
    
 
-### 평가의 목적
-   
-   
-
 본 평가보고서는 `r name1`(이하 '회사')의 주식가치평가에 대한 내부의사결정에 대한 참고자료를 제시하기 위하여 작성된 것입니다.
    
 
-### 평가방법
-   
-회사의 가치를 평가하는 방법으로는 자산접근법, 이익접근법 및 시장접근법 등 다양한 평가방법이 존재하며, 주요 평가방법의 특징을 검토한 결과는 다음과 같습니다.
-   
-
-##### 자산접근법  
-   
-
-자산접근법은 회사가 보유하는 자산에서 부채를 차감한 순자산의 가치를 이용하여 평가 대상회사의 가치를 결정하는 가치평가 접근법으로 취득원가로 기록된 자산과 부채의 가액을 공정가치로 조정하여 가치를 평가하는 방법입니다. 이 평가방법은 평가방법이 비교적 단순하고 객관적이라는 장점을 가지고 있으나, 회사라는 실체가 미래의 수익 또는 현금흐름창출을 목적으로 존재하는 영속체(Going Concern)라는 점에서는 수익창출능력을 반영하지 못하는 단점을 지니고 있습니다.  
-   
-
-##### 이익접근법  
-   
-
-이익접근법은 회사의 현재 재무상황보다는 회사가 보유한 유무형의 자산을 가지고 향후에 얼마만큼의 수익(또는 현금흐름)을 실현시킬 수 있는가라는 관점에서 미래의 수익창출능력을 회사의 가치로 평가하는 방법입니다. 대표적인 이익접근법인 현금흐름할인법(이하 “DCF법”)은 이론적으로 가장 우수한 방법이나, 회사의 가치를 결정하는 여러가지 요소의 결정시 주관이 개입될 여지가 있습니다.
-   
-
-##### 시장접근법
-   
-
-시장접근법은 회사의 재무상황과 미래 수익창출 가능성을 기초로 시장을 통해 형성되는 회사의 가치로 평가하는 방법입니다. 상장회사의 경우 증권시장에서 형성되는 주가로 회사의 가치를 평가하며, 비상장회사의 가치는 동일한 업종에 속하는 유사 규모 상장기업의 시장가치를 이용하여 상대가치를 산정할 수 있습니다. 그러나, 시장가치 평가방법은 비교대상이 되는 상장회사의 산정시 평가자의 주관이 개입될 여지가 있습니다.
-
-
-#### 본 평가업무에 적용한 평가방법
-   
-
-본 평가업무에서는 이익접근법 중 현금흐름할인법(DCF법)에 따른 잉여현금흐름을 산정한 후 가중평균자본비용을 적용하여 가치를 평가하는 방법을 적용하였습니다.  
-    
-   
 
 $$
 \begin{aligned}
@@ -272,20 +235,20 @@ $$
    
 ## 평가시 주요 가정 및 전제조건
    
-###	평가기준일 및 평가에 이용한 재무제표
+### 평가기준일 및 평가에 이용한 재무제표
    
 본 평가의 평가기준일은 `r date1`로 하여 수행하였으며, 본 평가시 이용한 재무제표는 평가대상 회사가 제시한 재무제표로 감사받지 아니한 재무제표입니다.   
    
-###	미래현금흐름 추정기간
+### 미래현금흐름 추정기간
    
 현금흐름 분석기간은 합리적으로 예측 가능한 미래로써 현금흐름이 정상상태(Steady state)에 도달하리라 예측되는 기간으로 2022년 10월 1일 부터 `r date2`까지의 기간으로 추정하였습니다.  
     
    
-###	계속기업가정과 영구성장률
+### 계속기업가정과 영구성장률
    
 평가대상기업이 속한 산업의 성장성을 보수적으로 반영하여 현금흐름 분석기간 이후의 현금흐름에 적용되는 영구성장률은 `r grate`% 로 적용하였습니다. 따라서 추정 기간이후의 현금흐름은 재무추정치로 산출한 세무조정영업이익에서 운전자본의 증감은 없으며, 비현금손익의 증감을 반영하고, 자본적 지출을 차감한 금액이 지속된다고 가정하였습니다.  
    
-평가대상의 영구현금흐름(Terminal Value)은 Table@tbl-terminal)과 같습니다. 
+평가대상의 영구현금흐름(Terminal Value)은 @tbl-terminal 과 같습니다. 
    
 
 ```{r}
@@ -298,31 +261,16 @@ Terminal <- read_excel(ss,
 
 ```{r}
 #| label: tbl-terminal
-#| tbl-cap: "Terminal Valueq"
+#| tbl-cap: "Terminal Value"
 #| tbl-pos: 'H'
 
-kable(Terminal, format = "latex", booktabs = TRUE, escape = TRUE) %>%
+kable(Terminal, format = "latex", booktabs = TRUE, escape = TRUE, align = "lrrrrrrr") %>%
   kable_styling(latex_options = c("striped","scale_down"))
 
 ```
 
 
-```{r include=FALSE}
-Terminal <- read_sheet(ss,
-                   sheet = "Terminal",
-                   col_types = 'c')
-```
-    
-```{r Terminal}
-kbl(Terminal,
-    booktabs = T,linesep = "",
-    align = "lrr",
-    format.args = list(big.mark = ",", scientific = FALSE),
-    position ="!h",
-    caption = "Terminal Value") %>%
-  kable_styling(latex_options = c("striped"))
-```
-    
+
    
 
 ###	주요 거시경제지표 및 법인세율
@@ -345,70 +293,31 @@ kbl(Terminal,
    
 ### 현금흐름의 추정결과
     
-평가대상의 추정 FCFF(영업현금흐름)은 Table\@ref(tab:FCFF)와 같습니다. 
+평가대상의 추정 FCFF(영업현금흐름)은 @tbl-fcff 와 같습니다. 
    
    
 ```{r}
 #| include: false
 
-Terminal <- read_excel(ss, 
-                     sheet = "Terminal",
+FCFF <- read_excel(ss, 
+                     sheet = "FCFF",
                      col_types = "text")
 ```
 
 ```{r}
-#| label: tbl-terminal
-#| tbl-cap: "Terminal Value"
+#| label: tbl-fcff
+#| tbl-cap: "Free Cash Flow to the Firm"
 #| tbl-pos: 'H'
 
-kable(Terminal, format = "latex", booktabs = TRUE, escape = TRUE) %>%
+kable(FCFF, format = "latex", booktabs = TRUE, escape = TRUE, align = "lrr") %>%
   kable_styling(latex_options = c("striped","scale_down"))
 
 ```
 
 
-```{r include=FALSE}
-FCFF <- read_sheet(ss,
-                   sheet = "FCFF",
-                   col_types = 'c')
-```
-    
-```{r FCFF}
-kbl(FCFF,
-    booktabs = T,linesep = "",
-    align = "lrrrrrrr",
-    format.args = list(big.mark = ",", scientific = FALSE),
-    position ="!h",
-    caption = "Free Cash Flow to the Firm") %>%
-  kable_styling(latex_options = c("striped","scale_down"))
-```
-    
+
     
 
-## 시각화 예시
-
-```{r}
-#| label: tbl-visualization
-#| echo: false
-#| tbl-cap: "Sales Data Visualization"
-#| tbl-pos: 'H'
-
-library(ggplot2)
-
-# 예시 데이터 생성
-sales_data <- data.frame(
-  month = factor(c("1월", "2월", "3월"), levels = c("1월", "2월", "3월")),
-  sales = c(150, 220, 180)
-)
-
-# 그래프 생성
-ggplot(sales_data, aes(x = month, y = sales, fill = month)) +
-  geom_bar(stat = "identity") +
-  labs(title = "월별 판매량", x = "월", y = "판매량 (백만 원)") +
-  theme_minimal(base_family = "NanumGothic") # 한글 폰트 지정
-
-```
-   
 
 ## 할인율
    
@@ -499,12 +408,42 @@ $$
 >> 세율     `r round(tax *100, 2)`%\
 >> 부채자본비율     `r round(drate*100, 2)`%\
    
-
+   
+\newpage
    
 # 이미지 넣는 예시   
+
+이미지를 삽입하는 예시는 @fig-beta 와 같습니다.
    
-![Calculating Beta with Regression](064290.png){width=80%}
+![](064290.png){#fig-beta fig-alt="Calculating Beta with Regression." fig-align="left" width=60%}
    
+   
+\newpage
+   
+# 시각화 예시
+
+시각화 예시의 결과는 @fig-sales 와 같습니다.
+
+```{r}
+#| echo: false
+#| label: fig-sales
+#| tbl-cap: "Sales Data Visualization"
+#| tbl-pos: 'H'
+
+library(ggplot2)
+
+# 예시 데이터 생성
+sales_data <- data.frame(
+  month = factor(c("1월", "2월", "3월"), levels = c("1월", "2월", "3월")),
+  sales = c(150, 220, 180)
+)
+
+# 그래프 생성
+ggplot(sales_data, aes(x = month, y = sales, fill = month)) +
+  geom_bar(stat = "identity") +
+  labs(title = "월별 판매량", x = "월", y = "판매량 (백만 원)")
+
+```
    
 
    

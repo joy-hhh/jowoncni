@@ -25,4 +25,4 @@ def generate_pdf(company, target, date, output_name="cover"):
 
 # 테스트 실행 예시 (단독 실행 시)
 if __name__ == "__main__":
-    generate_pdf("주식회사 조원씨앤아이", "사단법인 한국알사용자회", "2025년 1월 10일")
+    generate_pdf("주식회사 조원씨앤아이", "주식회사 마켓링크", "2025년 1월 10일")
